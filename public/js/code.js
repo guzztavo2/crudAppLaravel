@@ -19,7 +19,33 @@ function main() {
 function tableScript() {
     selectAllBtnCheckBox();
     informacaoRow();
+    removerInformacaoBtnAction();
 
+    function removerInformacaoBtnAction(){
+        // data-bs-target="#removerInformacao"
+        let deletarInformacaobtn = document.querySelector('#deletarInformacaoBTN');
+        alertModal('Ops...', 'Você precisa selecionar a informação antes de remove-la.');
+        deletarInformacaobtn.setAttribute('data-bs-target', '#alertModal');
+
+        deletarInformacaobtn.addEventListener('click', function(){
+            let itensSelecionados = [];
+            document.querySelectorAll('.form-check-input.children').forEach((item)=>{
+                if(item.checked === true)
+                itensSelecionados.push(item);
+                itensSelecionados[itensSelecionados.length - 1] = itensSelecionados[itensSelecionados.length - 1].parentElement.parentElement.parentElement.querySelector('.id')
+            })
+            if(itensSelecionados.length > 0){
+                deletarInformacaobtn.setAttribute('data-bs-target', '#removerInformacao');
+                let ModalRemover = document.querySelector('#removerInformacao');
+
+                itensSelecionados.forEach(function(item,index){
+                    itensSelecionados[index] = '<input type="hidden" name="informacoes[item][]">'
+                })
+                console.log(itensSelecionados);
+                ModalRemover.querySelector('#formRemoverInfo');
+            }
+        })
+    }
     function informacaoRow() {
         let rows = document.querySelectorAll('#tableInformacaoRow');
         let inputSelectAll = document.querySelector('#selectAllCheck');
@@ -41,10 +67,16 @@ function tableScript() {
                 if (count == 0) {
                     inputSelectAll.indeterminate = null;
                     inputSelectAll.checked = false;
+                    let deletarInformacaobtn = document.querySelector('#deletarInformacaoBTN');
+                    alertModal('Ops...', 'Você precisa selecionar a informação antes de remove-la.');
+                    deletarInformacaobtn.setAttribute('data-bs-target', '#alertModal');
+
                 } else if (childrensCheckBox.length > count)
+                deletarInformacaobtn.setAttribute('data-bs-target', '#removerInformacao');
                     inputSelectAll.indeterminate = true;
 
                 if (childrensCheckBox.length == count) {
+                    deletarInformacaobtn.setAttribute('data-bs-target', '#removerInformacao');
                     inputSelectAll.indeterminate = null;
                     inputSelectAll.checked = true;
                 }
@@ -53,30 +85,41 @@ function tableScript() {
     }
     function selectAllBtnCheckBox() {
         let childrensCheckBox = document.querySelectorAll('.form-check-input.children');
+        let childrensLabel = document.querySelectorAll('.form-check-input.children');
+        childrensLabel.forEach((item)=>{
+            item.addEventListener('click', function(){
+                if(this.checked === true)
+                this.checked = false;
+                else
+                this.checked = true;
+            })
+        })
         let inputSelectAll = document.querySelector('#selectAllCheck');
         let todosSelecionados;
         childrensCheckBox.forEach((children)=>{
             children.checked = false;
             inputSelectAll.indeterminate = null;
             inputSelectAll.checked = false;
+
         })
-        if (inputSelectAll.indeterminate === true)
-            todosSelecionados = false;
-        else
-            todosSelecionados = inputSelectAll.checked
+
+
+        todosSelecionados = inputSelectAll.checked
 
         inputSelectAll.onclick = function () {
+            let deletarInformacaobtn = document.querySelector('#deletarInformacaoBTN');
+
+
             childrensCheckBox.forEach(function (item) {
-                if (todosSelecionados === false) {
-                    item.checked = true;
-                } else {
-                    item.checked = false;
-                }
+              item.checked = inputSelectAll.checked;
+              if(inputSelectAll.checked === false){
+                alertModal('Ops...', 'Você precisa selecionar a informação antes de remove-la.');
+                deletarInformacaobtn.setAttribute('data-bs-target', '#alertModal');
+              }else{
+                deletarInformacaobtn.setAttribute('data-bs-target', '#removerInformacao');
+              }
+
             })
-            if (todosSelecionados === false)
-                todosSelecionados = true;
-            else
-                todosSelecionados = false;
         }
 
         childrensCheckBox.forEach(function (item) {
@@ -87,6 +130,7 @@ function tableScript() {
                 this.checked = true;
             })
             item.addEventListener('change', function () {
+                let deletarInformacaobtn = document.querySelector('#deletarInformacaoBTN');
 
                 count = 0;
                 childrensCheckBox.forEach((item1) => {
@@ -96,12 +140,21 @@ function tableScript() {
                 if (count == 0) {
                     inputSelectAll.indeterminate = null;
                     inputSelectAll.checked = false;
-                } else if (childrensCheckBox.length > count)
+                    alertModal('Ops...', 'Você precisa selecionar a informação antes de remove-la.');
+                    deletarInformacaobtn.setAttribute('data-bs-target', '#alertModal');
+
+                } else if (childrensCheckBox.length > count){
                     inputSelectAll.indeterminate = true;
-                else if (childrensCheckBox.length == count) {
+                    deletarInformacaobtn.setAttribute('data-bs-target', '#removerInformacao');
+                }
+
+                if (childrensCheckBox.length == count) {
                     inputSelectAll.indeterminate = null;
                     inputSelectAll.checked = true;
+                    deletarInformacaobtn.setAttribute('data-bs-target', '#removerInformacao');
+
                 }
+
             })
         })
 
@@ -110,6 +163,14 @@ function tableScript() {
 }
 
 
+function alertModal(title, body){
+    let modal = document.querySelector('#alertModal');
+    let titleModal = modal.querySelector('.title');
+    let bodyModal = modal.querySelector('.body');
+    titleModal.innerHTML = title;
+    bodyModal.innerHTML = body;
+
+}
 
 
 

@@ -20,6 +20,17 @@ class Informacao extends Model
         $this->informacao = $informacao;
         $this->dataAtualizacao = date("Y-m-d H:i:s");
     }
+    private static function reorganizarIDTabela(){
+        $listInformacoes = self::all();
+
+        $count = 1;
+        foreach($listInformacoes as $informacao){
+            $informacao->id = $count;
+            $informacao->save();
+            $count++;
+        }
+
+    }
     // Gerar uma informação pseudo-aleatória
     private static function gerarInformacaoAleatoria():Informacao{
         $informacao = new Informacao();
@@ -33,5 +44,6 @@ class Informacao extends Model
             $informacao = self::gerarInformacaoAleatoria();
             $informacao->save();
         }
+        self::reorganizarIDTabela();
     }
 }
