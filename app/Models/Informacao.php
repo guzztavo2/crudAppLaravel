@@ -44,6 +44,6 @@ class Informacao extends Model
             $informacao = self::gerarInformacaoAleatoria();
             $informacao->save();
         }
-        self::reorganizarIDTabela();
+        //self::reorganizarIDTabela();
     }
 }

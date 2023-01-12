@@ -9,7 +9,52 @@ class InformacaoController extends Controller
 {
     const PORPAGINA = 10;
 
-    public function removerInformacao(Request $request){
+    public function removerInformacao(Request $request)
+    {
+        $listResultado = [];
+        foreach ($request->informacoes as $key => $value) {
+            $listResultado[] = Informacao::where('id', '=', $key)->get()[0];
+            $listResultado[count($listResultado) - 1]->forceDelete();
+        }
+        return redirect()
+            ->back()
+            ->with('ErroLimparInformacao', 'As informações selecionadas foram removidas com sucesso!');
+    }
+    function inserirNovaInformacao(Request $request){
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'inserirInformacao' => 'required|max:100|min:10|string',
+            ],
+            $messages = [
+                'required' => 'Esse campo não pode ficar vazio.',
+                'min' => 'Esse campo aceita no minimo 10 caracter(es).',
+                'max' => 'Esse campo aceita no maximo 100 caracter(es).',
+                'string' => 'Esse campo aceita apenas caracteres.'
+            ],
+        );
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator, 'inserirInformacao');
+        }
+
+        $informacao = (string)filter_var($request->inserirInformacao, FILTER_DEFAULT);
+
+        try{
+        $info = new Informacao();
+        $info->construirInformacao($informacao);
+        $info->save();
+        return redirect(route('home',['id'=>'desc']))
+        ->with('sucessoInserirInformacao', 'A informação foi salva no nosso banco de dados com sucesso!');
+
+        }catch(Exception $e){
+            return redirect()
+            ->back()
+            ->with('ErrorInserirInformacao', 'Não foi possível salvar a informação no momento, por favor, tente novamente.');
+        }
 
     }
     public function index(Request $request)
@@ -20,10 +65,10 @@ class InformacaoController extends Controller
                 $orderBy[0] = 'id';
                 $orderBy[1] = (string) $request['id'];
                 break;
-                case $request['informacao'] !== null:
-                    $orderBy[0] = 'informacao';
-                    $orderBy[1] = (string) $request['informacao'];
-                    break;
+            case $request['informacao'] !== null:
+                $orderBy[0] = 'informacao';
+                $orderBy[1] = (string) $request['informacao'];
+                break;
             case $request['dataCriacao'] !== null:
                 $orderBy[0] = 'dataCriacao';
                 $orderBy[1] = (string) $request['dataCriacao'];
@@ -33,60 +78,50 @@ class InformacaoController extends Controller
                 $orderBy[1] = (string) $request['dataAtualizacao'];
                 break;
             default:
-            $orderBy[0] = 'id';
-            $orderBy[1] = 'asc';
-            break;
+                $orderBy[0] = 'id';
+                $orderBy[1] = 'asc';
+                break;
         }
 
         $informacao = new Informacao();
         $paginaAtual = isset($request->pagina) ? ((int) $request->pagina !== 0 ? (int) $request->pagina : 1) : 1;
 
         $inicio = self::PORPAGINA * $paginaAtual - self::PORPAGINA;
-        $buscar = isset($request->buscar) ? (string)filter_var($request->buscar, FILTER_DEFAULT) : '';
+        $buscar = isset($request->buscar) ? (string) filter_var($request->buscar, FILTER_DEFAULT) : '';
 
-        if($buscar !== ''){
-        $informacao = Informacao::where('informacao','LIKE','%'.$buscar.'%')
-            ->orWhere('dataCriacao', 'LIKE', '%'.$buscar.'%')
-            ->get();
+        if ($buscar !== '') {
+            $informacao = Informacao::where('informacao', 'LIKE', '%' . $buscar . '%')
+                ->orWhere('dataCriacao', 'LIKE', '%' . $buscar . '%')
+                >orWhere('dataAtualizacao', 'LIKE', '%' . $buscar . '%')
+                ->get();
             $paginacao = ceil(count($informacao) / self::PORPAGINA);
 
-            $informacao = Informacao::where('informacao','LIKE','%'.$buscar.'%')
-            ->orWhere('dataCriacao', 'LIKE', '%'.$buscar.'%')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->limit(self::PORPAGINA)
-            ->offset($inicio)
-            ->get();
-        }
-        else{
+            $informacao = Informacao::where('informacao', 'LIKE', '%' . $buscar . '%')
+                ->orWhere('dataCriacao', 'LIKE', '%' . $buscar . '%')
+                >orWhere('dataAtualizacao', 'LIKE', '%' . $buscar . '%')
+                ->orderBy($orderBy[0], $orderBy[1])
+                ->limit(self::PORPAGINA)
+                ->offset($inicio)
+                ->get();
+        } else {
             $informacao = Informacao::orderBy($orderBy[0], $orderBy[1])
-            ->limit(self::PORPAGINA)
-            ->offset($inicio)
-            ->get();
+                ->limit(self::PORPAGINA)
+                ->offset($inicio)
+                ->get();
             $paginacao = ceil(count(Informacao::all()) / self::PORPAGINA);
-
         }
         $orderByInvertido = '';
-        if($orderBy[1] === 'desc')
-            $orderByInvertido = (string)'asc';
-        else
-            $orderByInvertido = (string)'desc';
-
-        if($buscar !== ''){
-            return view('render', ['listInformacoes' => $informacao,
-            'paginacao' => $paginacao,
-            'paginaAtual' => $paginaAtual,
-            'orderByInvertido' => $orderByInvertido,
-            'buscar' => $buscar,
-            'orderBy' => $orderBy]);
-
-        } else{
-            return view('render', ['listInformacoes' => $informacao,
-            'paginacao' => $paginacao,
-            'paginaAtual' => $paginaAtual,
-            'orderByInvertido' => $orderByInvertido,
-            'orderBy' => $orderBy]);
+        if ($orderBy[1] === 'desc') {
+            $orderByInvertido = (string) 'asc';
+        } else {
+            $orderByInvertido = (string) 'desc';
         }
 
+        if ($buscar !== '') {
+            return view('render', ['listInformacoes' => $informacao, 'paginacao' => $paginacao, 'paginaAtual' => $paginaAtual, 'orderByInvertido' => $orderByInvertido, 'buscar' => $buscar, 'orderBy' => $orderBy]);
+        } else {
+            return view('render', ['listInformacoes' => $informacao, 'paginacao' => $paginacao, 'paginaAtual' => $paginaAtual, 'orderByInvertido' => $orderByInvertido, 'orderBy' => $orderBy]);
+        }
     }
     public function up(Request $request, $pagina)
     {
