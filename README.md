@@ -11,3 +11,17 @@
 
 ### Não se esqueça de alterar o arquivo ".env" no diretório raiz:
 Será necessário alterar as configurações do banco de dados.
+
+
+# Algumas imagens do projeto rodando:
+
+<p align="center">
+<img src="https://github.com/guzztavo2/crudAppLaravel/blob/main/imagens/gif-02.gif?raw=true">
+<img src="https://github.com/guzztavo2/crudAppLaravel/blob/main/imagens/gif-03.gif?raw=true">
+<img src="https://github.com/guzztavo2/crudAppLaravel/blob/main/imagens/gif-04.gif?raw=true">
+<img src="https://github.com/guzztavo2/crudAppLaravel/blob/main/imagens/gif-05.gif?raw=true">
+<img src="https://github.com/guzztavo2/crudAppLaravel/blob/main/imagens/gif-06.gif?raw=true">
+<img src="https://github.com/guzztavo2/crudAppLaravel/blob/main/imagens/gif-07.gif?raw=true">
+<img src="https://github.com/guzztavo2/crudAppLaravel/blob/main/imagens/gif-08.gif?raw=true">
+</p>
+
