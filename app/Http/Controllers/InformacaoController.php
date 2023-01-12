@@ -9,6 +9,38 @@ class InformacaoController extends Controller
 {
     const PORPAGINA = 10;
 
+    public function editarInformacao(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'editarInformacao' => 'required|max:100|min:10|string',
+                'idInformacao' => 'required|string',
+            ],
+            $messages = [
+                'required' => 'Esse campo: ":attribute". Não pode ficar vazio.',
+                'min' => 'Esse campo: ":attribute". Aceita no minimo 10 caracter(es).',
+                'max' => 'Esse campo: ":attribute". Aceita no maximo 100 caracter(es).',
+                'string' => 'Esse campo: ":attribute". Aceita apenas caracteres.',
+            ],
+        );
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator, 'editarInformacao');
+        }
+
+        try {
+            $informacao = Informacao::find((string) filter_var($request->idInformacao, FILTER_DEFAULT));
+            $informacao->atualizarInformacao((string) filter_var($request->editarInformacao, FILTER_DEFAULT));
+            $informacao->save();
+            return redirect(route('home', ['buscar' => $informacao->informacao]))->with('sucessoInserirInformacao', 'A informação foi salva no nosso banco de dados com sucesso!');
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->with('editarInformacaoErro', 'Não foi possível salvar a informação editada no momento, por favor, tente novamente.');
+        }
+    }
     public function removerInformacao(Request $request)
     {
         $listResultado = [];
@@ -20,8 +52,8 @@ class InformacaoController extends Controller
             ->back()
             ->with('ErroLimparInformacao', 'As informações selecionadas foram removidas com sucesso!');
     }
-    function inserirNovaInformacao(Request $request){
-
+    function inserirNovaInformacao(Request $request)
+    {
         $validator = Validator::make(
             $request->all(),
             [
@@ -31,7 +63,7 @@ class InformacaoController extends Controller
                 'required' => 'Esse campo não pode ficar vazio.',
                 'min' => 'Esse campo aceita no minimo 10 caracter(es).',
                 'max' => 'Esse campo aceita no maximo 100 caracter(es).',
-                'string' => 'Esse campo aceita apenas caracteres.'
+                'string' => 'Esse campo aceita apenas caracteres.',
             ],
         );
 
@@ -41,21 +73,18 @@ class InformacaoController extends Controller
                 ->withErrors($validator, 'inserirInformacao');
         }
 
-        $informacao = (string)filter_var($request->inserirInformacao, FILTER_DEFAULT);
+        $informacao = (string) filter_var($request->inserirInformacao, FILTER_DEFAULT);
 
-        try{
-        $info = new Informacao();
-        $info->construirInformacao($informacao);
-        $info->save();
-        return redirect(route('home',['id'=>'desc']))
-        ->with('sucessoInserirInformacao', 'A informação foi salva no nosso banco de dados com sucesso!');
-
-        }catch(Exception $e){
+        try {
+            $info = new Informacao();
+            $info->construirInformacao($informacao);
+            $info->save();
+            return redirect(route('home', ['id' => 'desc']))->with('sucessoInserirInformacao', 'A informação foi salva no nosso banco de dados com sucesso!');
+        } catch (Exception $e) {
             return redirect()
-            ->back()
-            ->with('ErrorInserirInformacao', 'Não foi possível salvar a informação no momento, por favor, tente novamente.');
+                ->back()
+                ->with('ErrorInserirInformacao', 'Não foi possível salvar a informação no momento, por favor, tente novamente.');
         }
-
     }
     public function index(Request $request)
     {
@@ -92,13 +121,13 @@ class InformacaoController extends Controller
         if ($buscar !== '') {
             $informacao = Informacao::where('informacao', 'LIKE', '%' . $buscar . '%')
                 ->orWhere('dataCriacao', 'LIKE', '%' . $buscar . '%')
-                >orWhere('dataAtualizacao', 'LIKE', '%' . $buscar . '%')
+                ->orWhere('dataAtualizacao', 'LIKE', '%' . $buscar . '%')
                 ->get();
             $paginacao = ceil(count($informacao) / self::PORPAGINA);
 
             $informacao = Informacao::where('informacao', 'LIKE', '%' . $buscar . '%')
                 ->orWhere('dataCriacao', 'LIKE', '%' . $buscar . '%')
-                >orWhere('dataAtualizacao', 'LIKE', '%' . $buscar . '%')
+                ->orWhere('dataAtualizacao', 'LIKE', '%' . $buscar . '%')
                 ->orderBy($orderBy[0], $orderBy[1])
                 ->limit(self::PORPAGINA)
                 ->offset($inicio)

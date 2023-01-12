@@ -8,3 +8,6 @@
 - [LARAVEL](https://laravel.com)
 - [Bootstrap](https://getbootstrap.com/)
 
+
+### Não se esqueça de alterar o arquivo ".env" no diretório raiz:
+Será necessário alterar as configurações do banco de dados.

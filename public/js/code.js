@@ -2,11 +2,6 @@ window.onload = function () {
     main();
 
 }
-
-
-
-
-
 function main() {
     ModalScript();
     tableScript();
@@ -183,24 +178,25 @@ function ModalScript() {
     inserirInformacaoModal();
     editarInformacaoModal();
 
-    function editarInformacaoModal(){
+    function editarInformacaoModal() {
 
-        let ListopenModalInput = document.querySelectorAll('#btnOpenEditarModal');
-        let inputInformacao = document.getElementById('editarInformacaoInput');
-        let inputID = document.getElementById('editarInformacaoIDinput')
-        let inputDataCriacao = document.getElementById('editarInformacaoDataCriacaoInput');
-        let inputDataAtualizacao = document.getElementById('editarInformacaoDataAtualizacaoInput')
-        let label = document.getElementById('editarInformacaoLabel');
-        let salvarBtn = document.getElementById('editarInfoSaveBtn');
+        let ListopenModalInput = document.querySelectorAll('#btnOpenEditarModal'),
+            inputInformacao = document.getElementById('editarInformacaoInput'),
+            inputID = document.getElementById('editarInformacaoIDinput'),
+            inputDataCriacao = document.getElementById('editarInformacaoDataCriacaoInput'),
+            inputDataAtualizacao = document.getElementById('editarInformacaoDataAtualizacaoInput'),
+            label = document.getElementById('editarInformacaoLabel'),
+            salvarBtn = document.getElementById('editarInfoSaveBtn');
 
-        ListopenModalInput.forEach((input)=>{
-            input.onclick = (event)=>{
+        ListopenModalInput.forEach((input) => {
+            input.onclick = (event) => {
                 let Element = event.target.parentElement.parentElement;
                 inputInformacao.value = Element.querySelector('.informacao').innerHTML;
+                document.querySelector('#informacaoEditarID').value = Element.querySelector('.id').innerHTML;
                 inputID.value = Element.querySelector('.id').innerHTML;
                 inputDataCriacao.value = Element.querySelector('.dataCriacao').innerHTML;
                 inputDataAtualizacao.value = new Date().toLocaleString();
-                returnAlertMessageInputs(inputInformacao, label, inputInformacao.value.length+' / 100 caracteres');
+                returnAlertMessageInputs(inputInformacao, label, inputInformacao.value.length + ' / 100 caracteres');
                 setInterval(() => {
                     inputDataAtualizacao.value = new Date().toLocaleString();
 
@@ -211,12 +207,12 @@ function ModalScript() {
                     let maxLenght = 10;
 
                     if (event.target.value.length < maxLenght) {
-                        returnAlertMessageInputs(inputInformacao, label, event.target.value.length+' / 100 caracteres. Você precisa de no minimo ' + (maxLenght - event.target.value.length) + ' caracter(es).', true)
+                        returnAlertMessageInputs(inputInformacao, label, event.target.value.length + ' / 100 caracteres. Você precisa de no minimo ' + (maxLenght - event.target.value.length) + ' caracter(es).', true)
                         maxLenght = maxLenght - 1;
                         salvarBtn.classList.replace('btn-success', 'btn-danger');
                         salvarBtn.setAttribute('disabled', '');
-                    }else{
-                        returnAlertMessageInputs(inputInformacao, label, event.target.value.length+' / 100 caracteres. Tudo certo, só clicar em salvar!', false)
+                    } else {
+                        returnAlertMessageInputs(inputInformacao, label, event.target.value.length + ' / 100 caracteres. Tudo certo, só clicar em salvar!', false)
                         salvarBtn.removeAttribute('disabled');
                         salvarBtn.classList.replace('btn-danger', 'btn-success');
 
@@ -225,7 +221,7 @@ function ModalScript() {
                     let minLenght = 100;
 
                     if (event.target.value.length > minLenght) {
-                        returnAlertMessageInputs(inputInformacao, label, event.target.value.length+' / 100 caracteres. Você precisa apagar: ' + (event.target.value.length - minLenght) + ' caracteres.', true)
+                        returnAlertMessageInputs(inputInformacao, label, event.target.value.length + ' / 100 caracteres. Você precisa apagar: ' + (event.target.value.length - minLenght) + ' caracteres.', true)
                         maxLenght = maxLenght - 1;
                         salvarBtn.setAttribute('disabled', '');
                         salvarBtn.classList.replace('btn-success', 'btn-danger');
@@ -240,7 +236,7 @@ function ModalScript() {
     }
 
 
-    function inserirInformacaoModal(){
+    function inserirInformacaoModal() {
         let input = document.getElementById('inputInserirNovaInformacao');
         let label = document.getElementById('labelInserirNovaInformacao');
         let salvarBtn = document.getElementById('inserirInfoSaveBtn')
@@ -254,12 +250,12 @@ function ModalScript() {
             let maxLenght = 10;
 
             if (event.target.value.length < maxLenght) {
-                returnAlertMessageInputs(input, label, event.target.value.length+' / 100 caracteres. Você precisa de no minimo ' + (maxLenght - event.target.value.length) + ' caracter(es).', true)
+                returnAlertMessageInputs(input, label, event.target.value.length + ' / 100 caracteres. Você precisa de no minimo ' + (maxLenght - event.target.value.length) + ' caracter(es).', true)
                 maxLenght = maxLenght - 1;
                 salvarBtn.classList.replace('btn-success', 'btn-danger');
                 salvarBtn.setAttribute('disabled', '');
-            }else{
-                returnAlertMessageInputs(input, label, event.target.value.length+' / 100 caracteres. Tudo certo, só clicar em salvar!', false)
+            } else {
+                returnAlertMessageInputs(input, label, event.target.value.length + ' / 100 caracteres. Tudo certo, só clicar em salvar!', false)
                 salvarBtn.removeAttribute('disabled');
                 salvarBtn.classList.replace('btn-danger', 'btn-success');
 
@@ -268,7 +264,7 @@ function ModalScript() {
             let minLenght = 100;
 
             if (event.target.value.length > minLenght) {
-                returnAlertMessageInputs(input, label, event.target.value.length+' / 100 caracteres. Você precisa apagar: ' + (event.target.value.length - minLenght) + ' caracteres.', true)
+                returnAlertMessageInputs(input, label, event.target.value.length + ' / 100 caracteres. Você precisa apagar: ' + (event.target.value.length - minLenght) + ' caracteres.', true)
                 maxLenght = maxLenght - 1;
                 salvarBtn.setAttribute('disabled', '');
                 salvarBtn.classList.replace('btn-success', 'btn-danger');

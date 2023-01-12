@@ -137,7 +137,7 @@
                     <label for="inputInserirNovaInformacao" class="form-label">Digite a informação que você gostaria
                         de guardar:</label>
                     <input type="text" id="inputInserirNovaInformacao" name="inserirInformacao"
-                        class="form-control is-invalid" placeholder="Ex: Amêndoas">
+                        class="form-control is-invalid" placeholder="Ex: Amêndoas não são tão legais quanto maçãs.">
                     <div id="labelInserirNovaInformacao" class="invalid-feedback d-flex w-100 flex-wrap">
                         0 / 100 Caracteres. Você precisa de no minimo 10 caracteres para salvar.
                     </div>
@@ -164,36 +164,45 @@
             </div>
             <form action="{{ route('editarInformacao') }}" method="post">
                 @csrf
+                <input type="hidden" name="idInformacao" id="informacaoEditarID">
                 <div class="modal-body">
                     <div class="input-group flex-wrap p-1 mb-1 mt-2">
-                        <label for="editarInformacaoIDinput" class="form-label col-12">Identificação da Informação</label>
+                        <label for="editarInformacaoIDinput" class="form-label col-12">Identificação da
+                            Informação</label>
                         <span class="input-group-text" id="addon-wrapping">ID</span>
-                        <input type="text" class="is-valid form-control col-12" id="editarInformacaoIDinput" disabled value="2" aria-label="idInformacao" aria-describedby="addon-wrapping">
+                        <input type="text" name="informacaoID" class="is-valid form-control col-12"
+                            id="editarInformacaoIDinput" disabled aria-label="idInformacao"
+                            aria-describedby="addon-wrapping">
                         <div class="valid-feedback d-flex w-100 flex-wrap">
-                           Essa informação não pode ser editada!
+                            Essa informação não pode ser editada!
                         </div>
                     </div>
                     <div class="input-group flex-wrap p-1 mb-1 mt-2 ">
                         <span class="input-group-text" id="addon-wrapping">Informação</span>
-                        <input type="text" class="form-control" id="editarInformacaoInput" name="editarInformacao"  aria-describedby="addon-wrapping">
+                        <input type="text" class="form-control" id="editarInformacaoInput"
+                            name="editarInformacao" aria-describedby="addon-wrapping">
                         <div id="editarInformacaoLabel" class="valid-feedback d-flex w-100 flex-wrap">
 
                         </div>
                     </div>
                     <div class="input-group flex-wrap p-1 mb-1 mt-2">
-                        <label for="editarInformacaoDataCriacaoInput" class="form-label col-12">Data e hora da criação da Informação</label>
+                        <label for="editarInformacaoDataCriacaoInput" class="form-label col-12">Data e hora da criação
+                            da Informação</label>
                         <span class="input-group-text" id="addon-wrapping">Data e hora da criação</span>
-                        <input type="text" id="editarInformacaoDataCriacaoInput" class="is-valid form-control" disabled  aria-describedby="addon-wrapping">
+                        <input type="text" id="editarInformacaoDataCriacaoInput" class="is-valid form-control"
+                            disabled aria-describedby="addon-wrapping">
                         <div class="valid-feedback d-flex w-100 flex-wrap">
-                           Essa informação não pode ser editada!
+                            Essa informação não pode ser editada!
                         </div>
                     </div>
                     <div class="input-group flex-wrap p-1 mb-1 mt-2">
-                        <label for="editarInformacaoDataAtualizacaoInput" class="form-label col-12">Data e hora da atualização da Informação</label>
+                        <label for="editarInformacaoDataAtualizacaoInput" class="form-label col-12">Data e hora da
+                            atualização da Informação</label>
                         <span class="input-group-text" id="addon-wrapping">Data e hora da atualização</span>
-                        <input type="text" id="editarInformacaoDataAtualizacaoInput" class="is-valid form-control" disabled aria-describedby="addon-wrapping">
+                        <input type="text" id="editarInformacaoDataAtualizacaoInput" class="is-valid form-control"
+                            disabled aria-describedby="addon-wrapping">
                         <div class="valid-feedback d-flex w-100 flex-wrap">
-                           Essa informação não pode ser editada!
+                            Essa informação não pode ser editada!
                         </div>
                     </div>
                 </div>

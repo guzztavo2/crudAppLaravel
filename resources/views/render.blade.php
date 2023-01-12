@@ -62,10 +62,11 @@
                             <input class="text-bg-danger col-md-12 text-center p-1" type="submit" value="Deletar">
                         </form>
 
-                        <button type="button" id="btnOpenEditarModal" class="btn p-1 rounded-0 btn-warning col-md-6 squared" data-bs-toggle="modal"
-                        data-bs-target="#editarInformacaoModal">
-                        Editar
-                    </button>
+                        <button type="button" id="btnOpenEditarModal"
+                            class="btn p-1 rounded-0 btn-warning col-md-6 squared" data-bs-toggle="modal"
+                            data-bs-target="#editarInformacaoModal">
+                            Editar
+                        </button>
                     </td>
                 </tr>
             @endforeach
